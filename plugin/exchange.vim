@@ -3,16 +3,18 @@ function! s:exchange(x, y, reverse)
 	let b = getpos("'b")
 	let reg = getreg('"')
 	let reg_mode = getregtype('"')
+	let reg = getreg('9')
+	let reg_mode = getregtype('9')
 
 	call setpos("'a", a:y[2])
 	call setpos("'b", a:y[3])
-	call setreg('"', a:x[0], a:x[1])
-	silent exe "normal! `a" . a:y[1] . "`b\"\"p"
+	call setreg('9', a:x[0], a:x[1])
+	silent exe "normal! `a" . a:y[1] . "`b\"9p"
 
 	call setpos("'a", a:x[2])
 	call setpos("'b", a:x[3])
-	call setreg('"', a:y[0], a:y[1])
-	silent exe "normal! `a" . a:x[1] . "`b\"\"p"
+	call setreg('9', a:y[0], a:y[1])
+	silent exe "normal! `a" . a:x[1] . "`b\"9p"
 
 	if a:reverse
 		call cursor(a:x[2][1], a:x[2][2])
@@ -22,6 +24,7 @@ function! s:exchange(x, y, reverse)
 
 	call setpos("'a", a)
 	call setpos("'b", b)
+	call setreg('9', reg, reg_mode)
 	call setreg('"', reg, reg_mode)
 endfunction
 
@@ -29,7 +32,7 @@ function! s:exchange_get(type, vis)
 	let reg = getreg('"')
 	let reg_mode = getregtype('"')
 	let selection = &selection
-	let &selection = 'inclusive'
+	let &selection = 'exclusive'
 	if a:vis
 		let type = a:type
 		let [start, end] = s:store_pos("'<", "'>")
